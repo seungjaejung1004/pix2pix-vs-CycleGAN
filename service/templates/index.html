@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Transform Your Photos into Cartoon Art</h2>
+        <p>Upload an image</p>
+
+        <!-- 업로드 폼 -->
+        <form action="/predict" method="POST" enctype="multipart/form-data" class="upload-form">
+            <input type="file" name="file" accept="image/*" required>
+            <button type="submit" class="upload-btn">Upload !</button>
+        </form>
+
+        <!-- 원본 이미지와 예측 결과 이미지 -->
+        <div id="image-comparison-container" class="image-comparison-container" style="display: none;">
+            <div class="image-box">
+                <h2>Original Image:</h2>
+                <img id="original-img" src="" alt="Original Image">
+            </div>
+            <div class="image-box">
+                <h2>Cartoon Image:</h2>
+                <img id="result-img" src="" alt="Prediction Result">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 폼 제출 시 이미지 결과 표시
+        document.querySelector('.upload-form').onsubmit = function(event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+            var resultContainer = document.getElementById('image-comparison-container');
+            var originalImg = document.getElementById('original-img');
+            var resultImg = document.getElementById('result-img');
+
+            // 원본 이미지 미리 보기
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                originalImg.src = e.target.result;
+            };
+            reader.readAsDataURL(formData.get('file'));
+
+            // 예측 결과 받아오기
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(imageBlob => {
+                const imageUrl = URL.createObjectURL(imageBlob);
+                resultImg.src = imageUrl;
+                resultContainer.style.display = 'flex';  // 결과 보이기
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while processing the image.");
+            });
+        }
+    </script>
+</body>
+</html>
