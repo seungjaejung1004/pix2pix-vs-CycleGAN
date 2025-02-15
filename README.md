@@ -29,3 +29,5 @@ Paired dataset 기반으로 학습하는 모델인 Pix2Pix와 Unpaired dataset �
 
 ## 📌 결론
 - 모든 실험에서 Pix2Pix가 CycleGAN보다 우수한 성능을 보여주었다. CycleGAN과는 달리 Pix2Pix에는 실제정답과 비교하는 L1 Loss가 손실함수로 있기 때문에 당연한 결과였다.  하지만 실제로는 Paired dataset이 없는 경우가 대부분인데 CycleGAN은 Paired dataset이 존재하지 않을때 Ubpaired dataset으로도 Pix2Pix 못지 않은 성능을 낸 부분에서 의미가 있다
+
+## 🌐 응용서비스
